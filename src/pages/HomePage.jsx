@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Code2, Database, Globe, Mail, Github, Linkedin } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const skills = [
   { name: 'Frontend Engineering', icon: Globe },
@@ -34,6 +35,20 @@ const projects = [
 
 function HomePage() {
   const [status, setStatus] = useState('idle');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const sectionId = location.state?.scrollTo;
+    if (!sectionId) return;
+
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    navigate(location.pathname, { replace: true, state: null });
+  }, [location.pathname, location.state, navigate]);
 
   async function handleSubmit(event) {
     event.preventDefault();
